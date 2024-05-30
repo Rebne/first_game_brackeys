@@ -44,4 +44,4 @@ func _physics_process(delta):
 
 func _on_game_manager_game_ended():
 	gravity *= -1
-	player.position.y += 3
+	player.position.y -= 1

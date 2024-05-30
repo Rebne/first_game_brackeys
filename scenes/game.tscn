@@ -431,7 +431,7 @@ tracks/0/keys = {
 
 [sub_resource type="Animation" id="Animation_k7cul"]
 resource_name = "move"
-length = 1.5
+length = 0.9
 loop_mode = 2
 tracks/0/type = "value"
 tracks/0/imported = false
@@ -440,7 +440,7 @@ tracks/0/path = NodePath(".:position")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
-"times": PackedFloat32Array(0, 1.5),
+"times": PackedFloat32Array(0, 0.9),
 "transitions": PackedFloat32Array(1, 1),
 "update": 0,
 "values": [Vector2(301, 37), Vector2(381, 37)]
@@ -539,7 +539,7 @@ position = Vector2(131, 5)
 position = Vector2(340, 7)
 
 [node name="Coin4" parent="Coins" instance=ExtResource("4_wsbcw")]
-position = Vector2(664, 25)
+position = Vector2(664, 5)
 
 [node name="Coin5" parent="Coins" instance=ExtResource("4_wsbcw")]
 position = Vector2(-75, 7)
@@ -548,7 +548,7 @@ position = Vector2(-75, 7)
 position = Vector2(-235, 7)
 
 [node name="Coin7" parent="Coins" instance=ExtResource("4_wsbcw")]
-position = Vector2(-600, 8)
+position = Vector2(-601, -10)
 
 [node name="Platforms" type="Node" parent="."]
 
@@ -602,5 +602,6 @@ bus = &"Sound"
 [connection signal="gameEnded" from="GameManager" to="Player" method="_on_game_manager_game_ended"]
 [connection signal="gameEnded" from="GameManager" to="Player/Stopwatch" method="_on_game_manager_game_ended"]
 [connection signal="gameEnded" from="GameManager" to="Killzone" method="_on_game_manager_game_ended"]
+[connection signal="gameEnded" from="GameManager" to="GameManager" method="_on_game_ended"]
 [connection signal="timeout" from="Text/Tip/Timer" to="Text/Tip" method="_on_timer_timeout"]
 [connection signal="timeout" from="RestartTimer" to="RestartTimer" method="_on_timeout"]
