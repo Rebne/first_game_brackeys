@@ -1,8 +1,8 @@
 [gd_scene load_steps=2 format=3 uid="uid://ca8wil435t15r"]
 
-[ext_resource type="AudioStream" uid="uid://bbcnrseclcpgs" path="res://assets/music/time_for_adventure.mp3" id="1_x0skm"]
+[ext_resource type="AudioStream" uid="uid://c1gc6yu7sepcs" path="res://assets/music/princess_dragon_slayer.mp3" id="1_lgd2n"]
 
 [node name="Music" type="AudioStreamPlayer2D"]
-stream = ExtResource("1_x0skm")
+stream = ExtResource("1_lgd2n")
 autoplay = true
 bus = &"Music"
