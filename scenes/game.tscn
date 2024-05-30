@@ -1,12 +1,22 @@
-[gd_scene load_steps=14 format=3 uid="uid://cgmeqguocawuc"]
+[gd_scene load_steps=23 format=3 uid="uid://cgmeqguocawuc"]
 
 [ext_resource type="PackedScene" uid="uid://dvf5wj7438lch" path="res://scenes/player.tscn" id="1_q1quu"]
+[ext_resource type="Script" path="res://scripts/panel.gd" id="2_gckhh"]
 [ext_resource type="Texture2D" uid="uid://cx8uonrdc7xf4" path="res://assets/sprites/world_tileset.png" id="2_iqira"]
 [ext_resource type="PackedScene" uid="uid://bcitxfftmbajq" path="res://scenes/platform.tscn" id="3_ogm57"]
 [ext_resource type="PackedScene" uid="uid://s52u3s40yanf" path="res://scenes/coin.tscn" id="4_wsbcw"]
 [ext_resource type="PackedScene" uid="uid://qndq8rhy52tu" path="res://scenes/killzone.tscn" id="5_4r7at"]
 [ext_resource type="PackedScene" uid="uid://jwcp670oxsja" path="res://scenes/slime.tscn" id="6_gfteo"]
 [ext_resource type="PackedScene" uid="uid://c6k1oa11lj1ay" path="res://scenes/edge.tscn" id="7_bl32o"]
+[ext_resource type="FontFile" uid="uid://dtgwuhtkfhubo" path="res://assets/fonts/PixelOperator8.ttf" id="8_snp2b"]
+[ext_resource type="Script" path="res://scripts/gamemanager.gd" id="9_abh7b"]
+[ext_resource type="Script" path="res://scripts/label.gd" id="9_rb1t1"]
+[ext_resource type="FontFile" uid="uid://th5xmjp2gts2" path="res://assets/fonts/PixelOperator8-Bold.ttf" id="11_u021k"]
+[ext_resource type="Script" path="res://scripts/highscore.gd" id="13_0w4c4"]
+[ext_resource type="Script" path="res://scripts/restart_timer.gd" id="14_ru52k"]
+[ext_resource type="AudioStream" uid="uid://dincj8q72tfl6" path="res://assets/sounds/power_up.wav" id="15_1owmb"]
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_8xvlh"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_qxb42"]
 texture = ExtResource("2_iqira")
@@ -449,11 +459,40 @@ _data = {
 [node name="Player" parent="." instance=ExtResource("1_q1quu")]
 
 [node name="Camera2D" type="Camera2D" parent="Player"]
-position = Vector2(0, -5)
+unique_name_in_owner = true
+position = Vector2(1, 0)
 zoom = Vector2(4, 4)
 limit_bottom = 78
 limit_smoothed = true
 position_smoothing_enabled = true
+
+[node name="Stopwatch" type="Panel" parent="Player"]
+offset_left = 103.0
+offset_top = -68.0
+offset_right = 166.0
+offset_bottom = -51.0
+theme_override_styles/panel = SubResource("StyleBoxTexture_8xvlh")
+script = ExtResource("2_gckhh")
+
+[node name="Seconds" type="Label" parent="Player/Stopwatch"]
+layout_mode = 0
+offset_left = -120.0
+offset_top = 42.0
+offset_right = -80.0
+offset_bottom = 65.0
+theme_override_fonts/font = ExtResource("8_snp2b")
+theme_override_font_sizes/font_size = 8
+text = "00:"
+
+[node name="Msec" type="Label" parent="Player/Stopwatch"]
+layout_mode = 0
+offset_left = -102.0
+offset_top = 42.0
+offset_right = -62.0
+offset_bottom = 65.0
+theme_override_fonts/font = ExtResource("8_snp2b")
+theme_override_font_sizes/font_size = 8
+text = "00"
 
 [node name="Edges" type="Node" parent="."]
 
@@ -515,3 +554,53 @@ position = Vector2(-600, 8)
 
 [node name="Slime" parent="." instance=ExtResource("6_gfteo")]
 position = Vector2(603, 32)
+
+[node name="GameManager" type="Node" parent="."]
+unique_name_in_owner = true
+script = ExtResource("9_abh7b")
+
+[node name="Text" type="Node" parent="."]
+
+[node name="Tip" type="Label" parent="Text"]
+offset_left = -102.0
+offset_top = -51.0
+offset_right = 102.0
+offset_bottom = -16.0
+theme_override_fonts/font = ExtResource("8_snp2b")
+theme_override_font_sizes/font_size = 8
+text = "Collect all coins
+to win"
+horizontal_alignment = 1
+script = ExtResource("9_rb1t1")
+
+[node name="Timer" type="Timer" parent="Text/Tip"]
+wait_time = 3.0
+one_shot = true
+autostart = true
+
+[node name="Highscore" type="Label" parent="Text"]
+offset_left = -79.0
+offset_top = -76.0
+offset_right = 81.0
+offset_bottom = -43.0
+theme_override_fonts/font = ExtResource("11_u021k")
+theme_override_font_sizes/font_size = 8
+text = "HIGH SCORE: 1000"
+horizontal_alignment = 1
+vertical_alignment = 1
+script = ExtResource("13_0w4c4")
+
+[node name="RestartTimer" type="Timer" parent="."]
+wait_time = 3.0
+one_shot = true
+script = ExtResource("14_ru52k")
+
+[node name="WinSound" type="AudioStreamPlayer2D" parent="RestartTimer"]
+stream = ExtResource("15_1owmb")
+bus = &"Sound"
+
+[connection signal="gameEnded" from="GameManager" to="Player" method="_on_game_manager_game_ended"]
+[connection signal="gameEnded" from="GameManager" to="Player/Stopwatch" method="_on_game_manager_game_ended"]
+[connection signal="gameEnded" from="GameManager" to="Killzone" method="_on_game_manager_game_ended"]
+[connection signal="timeout" from="Text/Tip/Timer" to="Text/Tip" method="_on_timer_timeout"]
+[connection signal="timeout" from="RestartTimer" to="RestartTimer" method="_on_timeout"]
