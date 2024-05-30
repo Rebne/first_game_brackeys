@@ -10,6 +10,7 @@ var score: int = 0
 signal gameEnded
 
 func _ready():
+	get_window().title = "PRINCESS DRAGON SLAYER"
 	high_score = load_high_score()
 
 func _process(_delta):
@@ -28,7 +29,8 @@ func save_high_score(high_score_value: float):
 func load_high_score():
 	var file = FileAccess.open(save_path, FileAccess.READ)
 	if !FileAccess.file_exists(save_path):
-		return 1000.0
+		# 404 high score not found
+		return 1000.41
 	return file.get_float()
 
 func _on_game_ended():
